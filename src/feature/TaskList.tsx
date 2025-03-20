@@ -1,30 +1,31 @@
-import React, { use, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+import { AppDispatch, RootState } from "../redux/store";
 import Checkbox from "../components/Checkbox";
 import Button from "../components/Button";
-import { deleteTask, updateTask } from "../redux/reducers/taskSlicer";
+import {
+  deleteTask,
+  fetchTasks,
+  updateTask,
+} from "../redux/reducers/taskSlicer";
 
 const TaskList = () => {
-  const TaskList = useSelector((state: RootState) => state?.task.tasks);
-  const dispatch = useDispatch();
-  const fetchPost = async () => {
-    try {
-      const response = await fetch(
-        "https://jsonplaceholder.typicode.com/posts"
-      );
-      return response.json();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const dispatch: AppDispatch = useDispatch();
+  const { tasks, loading, error } = useSelector(
+    (state: RootState) => state?.task
+  );
+
   useEffect(() => {
-    fetchPost();
-  }, []);
+    dispatch(fetchTasks());
+  }, [dispatch]);
+  console.log({ tasks });
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
   return (
     <div>
       <div className="task-list">
-        {TaskList.map((task) => (
+        {tasks.map((task) => (
           <div
             key={task.id}
             className={task.isCompleted ? "task-row-completed" : "task-row"}
