@@ -8,6 +8,7 @@ import { deleteTask, updateTask } from "../redux/reducers/taskSlicer";
 const TaskList = () => {
   const TaskList = useSelector((state: RootState) => state?.task.tasks);
   const dispatch = useDispatch();
+
   return (
     <div>
       <div className="task-list">
