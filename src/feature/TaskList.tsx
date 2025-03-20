@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import Checkbox from "../components/Checkbox";
@@ -8,7 +8,19 @@ import { deleteTask, updateTask } from "../redux/reducers/taskSlicer";
 const TaskList = () => {
   const TaskList = useSelector((state: RootState) => state?.task.tasks);
   const dispatch = useDispatch();
-
+  const fetchPost = async () => {
+    try {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/posts"
+      );
+      return response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchPost();
+  }, []);
   return (
     <div>
       <div className="task-list">
